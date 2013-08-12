@@ -22,7 +22,7 @@ bool located = false;
 void request_stops() {
   if(!located) {
     text_layer_set_text(&textLayer, "LOCATING...");
-    http_location_request();
+    APP_LOG(APP_LOG_LEVEL_INFO, "LOCATION_REQUEST: %d", http_location_request());
     return;
   }
   text_layer_set_text(&textLayer, "GETTING STOPS!");
@@ -58,6 +58,7 @@ void failed(int32_t cookie, int http_status, void* context) {
 }
 
 void location(float latitude, float longitude, float altitude, float accuracy, void* context) {
+  APP_LOG(APP_LOG_LEVEL_INFO, "LOCATED");
   text_layer_set_text(&textLayer, "LOCATED!");
   our_latitude = latitude * LOC_FLOAT_SCALAR;
   our_longitude = longitude * LOC_FLOAT_SCALAR;
@@ -133,6 +134,8 @@ void handle_init(AppContextRef ctx) {
   // Attach our desired button functionality
   window_set_click_config_provider(&window, (ClickConfigProvider) click_config_provider);
 
+  http_set_app_id(STOP_HTTP_COOKIE);
+
   http_register_callbacks((HTTPCallbacks){
     .failure=failed,
     .success=success,
@@ -144,7 +147,13 @@ void handle_init(AppContextRef ctx) {
 
 void pbl_main(void *params) {
   PebbleAppHandlers handlers = {
-    .init_handler = &handle_init
+    .init_handler = &handle_init,
+    .messaging_info = {
+      .buffer_sizes = {
+        .inbound = 124,
+        .outbound = 256,
+      }
+    }
   };
   app_event_loop(params, &handlers);
 }
