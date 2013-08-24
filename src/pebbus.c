@@ -9,7 +9,9 @@
 #include "stops.h"
 #include "arrivals.h"
 
-PBL_APP_INFO_SIMPLE(HTTP_UUID, "OneBus", "Deniable Corp", 1 /* App version */);
+#include "version.h"
+
+PBL_APP_INFO(HTTP_UUID, "OneBus", "Deniable Corp", MAJOR_VERSION, MINOR_VERSION, RESOURCE_ID_IMAGE_MENU_ICON, APP_INFO_STANDARD_APP);
 
 Window window;
 AppContextRef ctx;
