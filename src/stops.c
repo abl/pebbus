@@ -32,9 +32,11 @@ static MenuLayer _stopsMenu;
 */
 
 #define STOP_SECTION_MAIN 0
-#define STOP_SECTION_LATITUDE 1
-#define STOP_SECTION_LONGITUDE 2
-#define STOP_SECTION_OPTIONS 3
+#define STOP_SECTION_CREDITS 1
+#define STOP_SECTION_LATITUDE 2
+#define STOP_SECTION_LONGITUDE 3
+#define STOP_SECTION_OPTIONS 4
+#define STOP_SECTION_TOTAL 5
 
 #define STOP_SECTION_OPTIONS_ROWS 3
 
@@ -50,6 +52,9 @@ void stops_draw_header(GContext *ctx, const Layer *cell_layer, uint16_t section_
             else {
                 menu_cell_basic_header_draw(ctx, cell_layer, stop_time_str);
             }
+            break;
+        case STOP_SECTION_CREDITS:
+            menu_cell_basic_header_draw(ctx, cell_layer, "Powered by OneBusAway");
             break;
         case STOP_SECTION_LONGITUDE:
             if(http_located) {
@@ -107,6 +112,7 @@ uint16_t stops_get_num_rows(struct MenuLayer *menu_layer, uint16_t section_index
             return stopsCount;
         case STOP_SECTION_LONGITUDE:
         case STOP_SECTION_LATITUDE:
+        case STOP_SECTION_CREDITS:
             return 0;
         case STOP_SECTION_OPTIONS:
             return STOP_SECTION_OPTIONS_ROWS;
@@ -117,7 +123,7 @@ uint16_t stops_get_num_rows(struct MenuLayer *menu_layer, uint16_t section_index
 }
 
 uint16_t stops_get_num_sections(struct MenuLayer *menu_layer, void *callback_context) {
-    return 4;
+    return STOP_SECTION_TOTAL;
 }
 
 void stops_select_click(struct MenuLayer *menu_layer, MenuIndex *cell_index, void *callback_context) {

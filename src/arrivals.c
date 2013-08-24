@@ -27,7 +27,9 @@ static MenuLayer _arrivalsMenu;
 */
 
 #define ARRIVAL_SECTION_MAIN 0
-#define ARRIVAL_SECTION_OPTIONS 1
+#define ARRIVAL_SECTION_CREDITS 1
+#define ARRIVAL_SECTION_OPTIONS 2
+#define ARRIVAL_SECTION_TOTAL 3
 
 #define ARRIVAL_SECTION_OPTIONS_ROWS 1
 
@@ -42,6 +44,9 @@ void arrivals_draw_header(GContext *ctx, const Layer *cell_layer, uint16_t secti
             else {
                 menu_cell_basic_header_draw(ctx, cell_layer, arrival_time_str);
             }
+            break;
+        case ARRIVAL_SECTION_CREDITS:
+            menu_cell_basic_header_draw(ctx, cell_layer, "Powered by OneBusAway");
             break;
         case ARRIVAL_SECTION_OPTIONS:
             menu_cell_basic_header_draw(ctx, cell_layer, "Options");
@@ -88,6 +93,8 @@ uint16_t arrivals_get_num_rows(struct MenuLayer *menu_layer, uint16_t section_in
     switch(section_index) {
         case ARRIVAL_SECTION_MAIN:
             return arrivalsCount;
+        case ARRIVAL_SECTION_CREDITS:
+            return 0;
         case ARRIVAL_SECTION_OPTIONS:
             return ARRIVAL_SECTION_OPTIONS_ROWS;
         default:
@@ -97,7 +104,7 @@ uint16_t arrivals_get_num_rows(struct MenuLayer *menu_layer, uint16_t section_in
 }
 
 uint16_t arrivals_get_num_sections(struct MenuLayer *menu_layer, void *callback_context) {
-    return 2;
+    return ARRIVAL_SECTION_TOTAL;
 }
 
 void arrivals_select_click(struct MenuLayer *menu_layer, MenuIndex *cell_index, void *callback_context) {
